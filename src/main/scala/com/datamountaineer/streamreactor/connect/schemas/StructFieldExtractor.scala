@@ -77,20 +77,20 @@ case class StructFieldsExtractor(includeAllFields: Boolean, fieldsAliasMap: Map[
             }
           case Date.LOGICAL_NAME =>
             value.asInstanceOf[Any] match {
-              case d: java.util.Date => d
-              case i: Int => Date.toLogical(field.schema, i)
+              case d: java.util.Date =>  StructFieldsExtractor.DateFormat.format(d)
+              case i: Int => StructFieldsExtractor.DateFormat.format(Date.toLogical(field.schema, i))
               case _ => throw new IllegalArgumentException(s"Can't convert $value to Date for schema:${field.schema().`type`()}")
             }
           case Time.LOGICAL_NAME =>
             value.asInstanceOf[Any] match {
-              case i: Int => Time.toLogical(field.schema, value.asInstanceOf[Int])
-              case d: java.util.Date => d
+              case i: Int => StructFieldsExtractor.TimeFormat.format(Time.toLogical(field.schema, value.asInstanceOf[Int]))
+              case d: java.util.Date => StructFieldsExtractor.TimeFormat.format(d)
               case _ => throw new IllegalArgumentException(s"Can't convert $value to Date for schema:${field.schema().`type`()}")
             }
           case Timestamp.LOGICAL_NAME =>
             value.asInstanceOf[Any] match {
-              case l: Long => Timestamp.toLogical(field.schema, l)
-              case d: java.util.Date => d
+              case l: Long => StructFieldsExtractor.DateFormat.format(Timestamp.toLogical(field.schema, l))
+              case d: java.util.Date => StructFieldsExtractor.DateFormat.format(d)
               case _ => throw new IllegalArgumentException(s"Can't convert $value to Date for schema:${field.schema().`type`()}")
             }
         }.orElse {

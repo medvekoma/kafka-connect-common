@@ -84,7 +84,7 @@ class StructFieldExtractorTest extends WordSpec with Matchers {
     }
   }
 
-  "handle Date fieldds" in {
+  "handle Date fields" in {
     val dateSchema = Date.builder().build()
     val schema = SchemaBuilder.struct().name("com.example.Person")
       .field("firstName", Schema.STRING_SCHEMA)
@@ -100,14 +100,14 @@ class StructFieldExtractorTest extends WordSpec with Matchers {
       .put("date", date)
 
     val map1 = new StructFieldsExtractor(false, Map("date" -> "date")).get(struct).toMap
-    map1.get("date").get shouldBe date
+    map1.get("date").get shouldBe StructFieldsExtractor.DateFormat.format(date)
     map1.size shouldBe 1
 
     val d = Date.toLogical(dateSchema, 10000)
     struct.put("date", d)
 
     val map2 = new StructFieldsExtractor(false, Map("date" -> "date")).get(struct).toMap
-    map2.get("date").get shouldBe d
+    map2.get("date").get shouldBe StructFieldsExtractor.DateFormat.format(d)
     map2.size shouldBe 1
 
   }
